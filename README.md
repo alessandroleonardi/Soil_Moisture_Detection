@@ -1,7 +1,3 @@
-Below is an example README file:
-
----
-
 # Automated Garden Irrigation & Environmental Monitoring System
 
 This project uses an ESP32 to remotely monitor environmental parameters and control irrigation for a garden. It reads data from a BME280 sensor (temperature, humidity, and pressure) and an analog soil moisture sensor, displays the values on an OLED display, and communicates with a remote MQTT broker. When the soil moisture drops below a specified threshold, the system activates a servo motor to irrigate the garden. It also utilizes deep sleep mode to conserve power.
@@ -124,6 +120,3 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 - Thanks to the developers of the libraries used in this project.
 - Special thanks to the ESP32 community for their continued support.
 
----
-
-Feel free to modify and expand this README to suit your project's needs. Enjoy building your automated garden irrigation system!
