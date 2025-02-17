@@ -1,143 +1,129 @@
-# Soil_Moisture_Detection
-A project to enhance the capability of soil and moisture detection using a microcontroller.
-Smart Garden Monitoring System
+Below is an example README file:
 
-Overview
+---
 
-This project is a Smart Garden Monitoring System based on an ESP32 microcontroller. It monitors soil moisture, temperature, and humidity and controls a servo motor to automate irrigation when needed. The system connects to a Wi-Fi network using WiFiManager and communicates with an MQTT broker to send sensor data and receive commands.
+# Automated Garden Irrigation & Environmental Monitoring System
 
-Features
+This project uses an ESP32 to remotely monitor environmental parameters and control irrigation for a garden. It reads data from a BME280 sensor (temperature, humidity, and pressure) and an analog soil moisture sensor, displays the values on an OLED display, and communicates with a remote MQTT broker. When the soil moisture drops below a specified threshold, the system activates a servo motor to irrigate the garden. It also utilizes deep sleep mode to conserve power.
 
-Wi-Fi Auto-Configuration: Uses WiFiManager for easy setup.
+## Features
 
-Sensor Integration:
+- **Remote Monitoring:**  
+  - Reads temperature, humidity, and soil moisture.
+  - Displays data on an OLED (SH1107) display.
+  - Publishes sensor readings to MQTT topics for remote monitoring.
+  
+- **Automated Irrigation:**  
+  - Activates a servo motor to irrigate when soil moisture falls below 30%.
+  - Monitors soil moisture during irrigation and stops the servo if moisture exceeds 60%.
 
-BME280 for temperature, humidity, and pressure readings.
+- **MQTT Communication:**  
+  - Publishes sensor data to topics such as `garden/sensors/temperature`, `humidity`, and `soil_moisture`.
+  - Subscribes to topics for remote control commands.
+  - Uses retained messages to keep the last known sensor data.
 
-Soil moisture sensor for monitoring soil conditions.
+- **Power Management:**  
+  - Uses deep sleep mode for 30 minutes to conserve energy.
+  - Wakes up via timer or external wake-up (GPIO 0).
 
-OLED Display (SH1107): Displays real-time sensor data.
+## Hardware Components
 
-MQTT Communication:
+- **ESP32:** Main microcontroller with WiFi and deep sleep capabilities.
+- **BME280 Sensor:** Measures temperature, humidity, and pressure.
+- **Soil Moisture Sensor:** Provides an analog signal representing soil moisture.
+- **OLED Display (SH1107):** Displays sensor readings locally.
+- **Servo Motor:** Controls the irrigation mechanism.
 
-Publishes sensor readings to an MQTT broker.
+## Software Dependencies
 
-Subscribes to commands for automation.
+The following libraries are required:
 
-Automated Irrigation:
+- [WiFiManager](https://github.com/tzapu/WiFiManager)
+- [PubSubClient](https://github.com/knolleary/pubsubclient)
+- [Adafruit_GFX](https://github.com/adafruit/Adafruit-GFX-Library)
+- [Adafruit_SH110X](https://github.com/adafruit/Adafruit_SH110X)
+- [Adafruit_Sensor](https://github.com/adafruit/Adafruit_Sensor)
+- [Adafruit_BME280](https://github.com/adafruit/Adafruit_BME280_Library)
+- [ESP32Servo](https://github.com/jkb-git/ESP32Servo)
 
-Controls a servo motor to open/close a water valve based on soil moisture.
+Make sure these libraries are installed in your Arduino IDE.
 
-Deep Sleep Mode: Saves power by sleeping for 30 minutes between readings.
+## Installation
 
-Hardware Requirements
+1. **Clone or Download the Repository:**
 
-ESP32 development board
+   ```bash
+   git clone https://github.com/yourusername/automated-garden-irrigation.git
+   ```
 
-BME280 Sensor (Temperature, Humidity, Pressure)
+2. **Open the Project in Arduino IDE:**
+   - Open the `.ino` file provided.
 
-Soil Moisture Sensor
+3. **Configure WiFi:**
+   - The system uses WiFiManager to create an access point (`AutoConnectAP`) for initial configuration. Connect to this network and enter your WiFi credentials.
 
-SH1107 OLED Display (64x128)
+4. **Set Up MQTT Broker:**
+   - Update the MQTT broker IP address in the code if necessary:
+     ```cpp
+     IPAddress server(192, 168, 245, 154);
+     ```
+   - Ensure your broker is running and accessible.
 
-Servo Motor (for controlling irrigation)
+5. **Upload the Code:**
+   - Connect your ESP32 to your computer and upload the sketch.
 
-Jumper wires
+## Usage
 
-Pin Configuration
+- **Monitoring:**  
+  The ESP32 will continuously monitor sensor values and display them on the OLED. Sensor data is also published to the corresponding MQTT topics.
 
-Component
+- **Irrigation Control:**  
+  When the soil moisture falls below the defined threshold (30%), the system will activate the servo motor to start irrigation. If soil moisture rises above 60% during irrigation, the servo will stop automatically.
 
-ESP32 Pin
+- **Power Management:**  
+  After processing sensor readings and checking for updates (including MQTT messages), the ESP32 enters deep sleep for 30 minutes. It can also be woken up externally by pressing a connected button on GPIO 0.
 
-Soil Moisture Sensor
+## Code Structure
 
-GPIO 34
+- **Main Files:**
+  - `setup()`: Initializes sensors, display, WiFi, MQTT, and hardware components.
+  - `loop()`: Handles sensor readings, display updates, MQTT communication, irrigation control, and deep sleep activation.
+  
+- **Key Functions:**
+  - `publishMessage()`: Publishes messages to MQTT topics with retention.
+  - `callback()`: Processes incoming MQTT messages and updates sensor values.
+  - `publishSensorData()`: Formats and publishes sensor data.
+  - `updateDisplay()`: Updates the OLED with the latest sensor readings.
+  - `controlServo()`: Activates and controls the servo motor for irrigation.
+  - `stayAwakeForUpdates()`: Keeps the system awake for a brief period to process MQTT messages before entering deep sleep.
 
-Servo Motor
+## Troubleshooting
 
-GPIO 12
+- **WiFi Connection Issues:**  
+  Ensure you are connecting to the WiFiManager AP for configuration. If connection fails, the ESP32 will restart.
 
-OLED SDA
+- **MQTT Issues:**  
+  Verify that your MQTT broker is running and that the IP address is correct. Check the serial monitor for connection logs.
 
-GPIO 26
+- **Sensor/Display Initialization:**  
+  If the OLED or BME280 fails to initialize, check the wiring and I2C addresses. The OLED should be at address `0x3C` and the BME280 at `0x77`.
 
-OLED SCL
+## Future Enhancements
 
-GPIO 25
+- Integration with additional sensors (e.g., light, soil nutrients).
+- Cloud integration for remote monitoring and data analytics.
+- Enhanced user interface for more detailed data presentation.
+- Further optimization of power consumption.
 
-Installation
+## License
 
-Install Required Libraries in the Arduino IDE:
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
-WiFiManager
+## Acknowledgments
 
-PubSubClient
+- Thanks to the developers of the libraries used in this project.
+- Special thanks to the ESP32 community for their continued support.
 
-Adafruit_GFX
+---
 
-Adafruit_SH110X
-
-Adafruit_Sensor
-
-Adafruit_BME280
-
-ESP32Servo
-
-Upload the Code to the ESP32 board.
-
-Connect to Wi-Fi using the WiFiManager setup page.
-
-Set up an MQTT Broker (e.g., Mosquitto or cloud services like HiveMQ).
-
-Subscribe to MQTT Topics to receive sensor updates.
-
-MQTT Topics
-
-Publish (ESP32 → Broker):
-
-garden/sensors/temperature (Temperature data)
-
-garden/sensors/humidity (Humidity data)
-
-garden/sensors/soilmoisture (Soil moisture data)
-
-Subscribe (Broker → ESP32):
-
-garden/actuators (Receives irrigation commands)
-
-How It Works
-
-Boot & Setup
-
-The ESP32 initializes the sensors, OLED display, and Wi-Fi connection.
-
-If the Wi-Fi is not configured, it opens an access point for setup.
-
-Sensor Readings & Publishing
-
-Reads soil moisture, temperature, and humidity.
-
-Publishes data to MQTT topics.
-
-Automated Irrigation
-
-If soil moisture < 50%, the servo motor activates to open the water valve.
-
-Deep Sleep Mode
-
-The ESP32 enters deep sleep for 30 minutes to save power.
-
-Troubleshooting
-
-Wi-Fi Connection Issues
-
-Restart the ESP32 and reconnect using the WiFiManager portal.
-
-MQTT Not Connecting
-
-Verify the MQTT broker IP and ensure the broker is running.
-
-No Sensor Data
-
-Check wiring and sensor connections.
+Feel free to modify and expand this README to suit your project's needs. Enjoy building your automated garden irrigation system!
