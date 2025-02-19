@@ -120,3 +120,4 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 - Thanks to the developers of the libraries used in this project.
 - Special thanks to the ESP32 community for their continued support.
 
+https://www.canva.com/design/DAGfXd2I2Wg/Qn1kp67lJiK5BCjSkkUfvg/edit?utm_content=DAGfXd2I2Wg&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
